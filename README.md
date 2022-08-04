@@ -23,20 +23,20 @@ DB tables
 ========================================
 Account:
 --------
-	- Account Number
-	- Currency 
-	- Branch Code
+    - Account Number
+    - Currency
+    - Branch Code
 
 Balance:
 --------
-	- Date
-	- Balance
-	
+    - Date
+    - Balance
+
 Relationships:
 --------------
-	Account ---< Balance	
-	    (1 to many)
-	    
+    Account ---< Balance
+        (1 to many)
+
 ========================================
 EnduroX servers
 ========================================
@@ -45,13 +45,13 @@ NOTE: For DB access EmbeddedSQL must be used!!!
 Router Server
 -------------
 Input fields:
-	- Account Number
-	- Date
+    - Account Number
+    - Date
 Output:
-	- Human readable message
+    - Human readable message
 Configuration file:
-	- Format: any (text, ini,...)
-	- Configuration parameter: Branch
+    - Format: any (text, ini,...)
+    - Configuration parameter: Branch
 Logic:
 1. Retrieve Account record from DB.
 2. If account not found return human readable message "Account not found"
@@ -62,16 +62,16 @@ Logic:
 Balance Server
 -------------
 Input fields:
-	- Account Number or internal ID
-	- Date
+    - Account Number or internal ID
+    - Date
 Output:
-	- Human readable message
+    - Human readable message
 Logic:
 1. Retrieve Account balance for specified date
 2. If balance exists
-	a) return human readable message "Account Balance: 999999.99" (where 999999.99 is actual value from db)
+    a) return human readable message "Account Balance: 999999.99" (where 999999.99 is actual value from db)
    else
-	a) return human readable message "Account Balance not available"
+    a) return human readable message "Account Balance not available"
 
 ========================================
 Tests
