@@ -83,3 +83,26 @@ Tests to be done:
 2. Request with existing Account, but from different branch (not specified in Router Server configuration)
 3. Request with existing Account with data for which there is no Balance record
 4. Request with existing Account and existing Balance record
+
+# Realization report
+The main solution developed by using docker centos container
+Install docker with centOS
+`docker pull centos`
+`docker run centos`
+
+Thorugh container using was issues with EnduroX setup. The solution it's adding the --proveleged flag
+`docker run -it --privileged -v ~/Projects/balance_db/:/opt/baldb --name="EnduroX" centos:latest`
+
+xadmin provision -d \
+    -v qprefix=baldb \
+    -v installQ=n  \
+    -v eventSv=n \
+    -v cpmSv=n \
+    -v configSv=n \
+    -v bridge=n \
+    -v addubf=bank.fd
+
+
+# .bashrc
+export PS1="[\u@\h] (\W)
+> "
