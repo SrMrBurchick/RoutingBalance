@@ -14,5 +14,6 @@ $#define __BANK_H
 T_ACCNUM        1       string  -       Account number
 T_ACCCUR        2       string  -       Account currency
 T_AMTAVL        3       double  -       Account balance
+T_BDATE         4       string  -       Balance date
 
 $#endif

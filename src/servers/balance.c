@@ -33,6 +33,8 @@ void BALANCE(TPSVCINFO *p_svc) {
 
     balanceService(p_ub);
 
+    printf("POROROOROR\n");
+
 out:
     tpreturn(ret == SUCCEED ? TPSUCCESS : TPFAIL, 0L, (char *)p_ub, 0L, 0L);
 }

@@ -8,7 +8,7 @@
 
 IEnduroxService::IEnduroxService()
 {
-    m_database.connect("account_balance",
+    m_database.connect("tcp:postgresql://localhost:5432/account_balance",
                        "endurox",
                        "000");
 }

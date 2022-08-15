@@ -5,13 +5,13 @@ Service for managing accounts and balances. Test task [info](./TASK_INFO.md)
 The main solution developed by using docker centos container
 
 ### Todo
- - [ ] [System setup](#system_setup)
+ - [X] [System setup](#system_setup)
 	 - [X] [Docker setup](#docker_setup)
 	 - [X] [EnduroX setup](#endurox_setup)
-	 - [ ] [PostrgresSQL setup](#database_setup)
- - [ ] [Application design](#application_setup)
-	 - [ ] [Database structure](#database_structure)
-	 - [ ] [Application structure](#application_structure)
+	 - [X] [PostrgresSQL setup](#database_setup)
+ - [X] [Application design](#application_setup)
+	 - [X] [Database structure](#database_structure)
+	 - [X] [Application structure](#application_structure)
 
 ### <a name="system_setup"></a> System setup
 #### <a name="docker_setup"></a> Docker setup
@@ -32,7 +32,6 @@ So, that [guide](https://www.endurox.org/dokuwiki/doku.php?id=endurox:v8.0.x:gui
 For installing endurox utils. I've created [script](./endurox_setup.sh) which is downloads and setups provision
 
 #### <a name="database_setup"></a> PostgresSQL setup
-##### Install the repository RPM:
 
 ### <a name="application_setup"></a> Application design
 #### <a name="database_structure"></a> Database structure
@@ -79,11 +78,6 @@ CREATE TABLE BALANCE(
 	CONSTRAINT FK_AccountBalance FOREIGN KEY (account_number)
 	REFERENCES ACCOUNT(account_number)
 );
-```
-Update account data:
-```
-INSERT INTO account (account_number, currency, branch_code)
-VALUES(1992742, 'UAH', 231244);
 ```
 
 #### <a name="application_structure"></a> Application structure

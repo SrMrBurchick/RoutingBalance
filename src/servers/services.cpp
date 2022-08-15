@@ -5,6 +5,7 @@
  */
 
 #include <iostream>
+#include <cstdio>
 #include "services.h"
 #include "router_service.hpp"
 #include "balance_service.hpp"
@@ -22,7 +23,13 @@ void routerService(UBFH *p_ub)
 
 void balanceService(UBFH *p_ub)
 {
+    static BalanceService service;
 
+    if (false == service.parseRequest(p_ub)) {
+        std::cout << "Account Balance not available" << std::endl;
+    } else {
+        printf("Yoy nay bude!\n");
+    }
 }
 
 }

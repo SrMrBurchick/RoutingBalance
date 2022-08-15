@@ -4,6 +4,7 @@
  * @created     : Monday Aug 15, 2022 11:39:24 EEST
  */
 
+#include <cstdio>
 #include "ecpg_database.h"
 #include "ecpg_sql.h"
 
@@ -13,6 +14,10 @@ ECPGDatabase::ECPGDatabase()
     : m_isConnected(false) {}
 
 ECPGDatabase::~ECPGDatabase()
+{
+}
+
+void ECPGDatabase::disconnect()
 {
     disconnect_from_database();
 }
@@ -28,6 +33,9 @@ bool ECPGDatabase::connect(const std::string_view path,
     if (SUCCES == connect_to_database(path.data(), user.data(),
                                       password.data())) {
         m_isConnected = true;
+        m_target = path;
+        m_user = user;
+        m_passwd = password;
     }
 
     return m_isConnected;

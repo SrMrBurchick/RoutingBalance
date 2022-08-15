@@ -21,8 +21,13 @@ public:
                  const std::string_view password);
 
     bool request(DatabaseTables table, Request& request);
+
+    void disconnect();
 private:
     bool m_isConnected;
+    std::string_view m_target;
+    std::string_view m_user;
+    std::string_view m_passwd;
 };
 
 #endif /* end of include guard __ECPG_DATABASE_H__ */

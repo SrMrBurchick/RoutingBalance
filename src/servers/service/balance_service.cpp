@@ -12,7 +12,7 @@ bool BalanceService::parseRequest(UBFH* p_ub)
 {
     BFLDLEN len;
     char account[28 + 1];
-    char date[9 + 1];
+    char date[10 + 1];
 
     /* Read the account field */
     len = sizeof(account);
@@ -32,6 +32,9 @@ bool BalanceService::parseRequest(UBFH* p_ub)
         return false;
     }
 
+
+    fprintf(stdout, "PIZDA!\n");
+
     fprintf(stdout, "Recived request: account = %s, date = %s\n",
             account, date);
 
@@ -40,7 +43,8 @@ bool BalanceService::parseRequest(UBFH* p_ub)
     request.account_number = std::stol(account);
     request.date = date;
 
-    if (m_database.request(DatabaseTables::eAccountTable, request)) {
+    if (m_database.request(DatabaseTables::eBalanceTable, request)) {
+        printf("Account Balance: %f\n", request.out_balance);
         return true;
     }
 
