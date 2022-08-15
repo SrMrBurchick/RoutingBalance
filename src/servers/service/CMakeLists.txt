@@ -6,7 +6,6 @@ add_library(service
 )
 
 if (NOT COMPILE_COMMANDS)
-
     link_directories(${CMAKE_SOURCE_DIR}/src/ecpg_database)
 
     target_link_libraries(service ecpg_database)
