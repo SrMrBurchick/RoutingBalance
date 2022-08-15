@@ -1,108 +1,90 @@
-****************************************************************************************************
-***                                               Info                                           ***
-****************************************************************************************************
-https://www.endurox.org/dokuwiki/doku.php?id=enduro_x_overview
-https://www.endurox.org/dokuwiki/doku.php?id=endurox:v8.0.x:guides:getting_started_tutorial#_creating_the_server_process
+# Balance Router service
+Service for managing accounts and balances. Test task [info](./TASK_INFO.md)
 
-****************************************************************************************************
-***                                             Exercise                                         ***
-****************************************************************************************************
-
-1. Install latest version of Enduro/X Middleware 8.0 (https://www.mavimax.com/downloads)
-2. Install or use existing database server - Oracle or Postgres.
-3. Create 2 database tables: Account, Balance
-4. Develop and configure 2 EnduroX servers: Router Server, Balance Server
-5. Test server calls
-6. Provide ud files, test results, all configuration files, source code and compiled binaries.
-
-Regarding DB table/field names, internal id, foreign constraints, indexes, field formats, server names and UBF field naming there are no strict requirements.
-You can use any names as you prefer.
-
-========================================
-DB tables
-========================================
-Account:
---------
-    - Account Number
-    - Currency
-    - Branch Code
-
-Balance:
---------
-    - Date
-    - Balance
-
-Relationships:
---------------
-    Account ---< Balance
-        (1 to many)
-
-========================================
-EnduroX servers
-========================================
-NOTE: For DB access EmbeddedSQL must be used!!!
-
-Router Server
--------------
-Input fields:
-    - Account Number
-    - Date
-Output:
-    - Human readable message
-Configuration file:
-    - Format: any (text, ini,...)
-    - Configuration parameter: Branch
-Logic:
-1. Retrieve Account record from DB.
-2. If account not found return human readable message "Account not found"
-3. Check if Account Branch code is equal to Branch value from configuration file.
-4. If codes are not equal or account does not exists then return human readable message "Branch not supported"
-5. Forward request to Balance Server
-
-Balance Server
--------------
-Input fields:
-    - Account Number or internal ID
-    - Date
-Output:
-    - Human readable message
-Logic:
-1. Retrieve Account balance for specified date
-2. If balance exists
-    a) return human readable message "Account Balance: 999999.99" (where 999999.99 is actual value from db)
-   else
-    a) return human readable message "Account Balance not available"
-
-========================================
-Tests
-========================================
-Tests must be done by creating *.ud files and executing them using utility - ud.
-
-Tests to be done:
-1. Request with non existing Account
-2. Request with existing Account, but from different branch (not specified in Router Server configuration)
-3. Request with existing Account with data for which there is no Balance record
-4. Request with existing Account and existing Balance record
-
-# Realization report
+## Realization report
 The main solution developed by using docker centos container
-Install docker with centOS
+
+### Todo
+ - [ ] [System setup](#system_setup)
+	 - [X] [Docker setup](#docker_setup)
+	 - [X] [EnduroX setup](#endurox_setup)
+	 - [ ] [PostrgresSQL setup](#database_setup)
+ - [ ] [Application design](#application_setup)
+	 - [ ] [Database structure](#database_structure)
+	 - [ ] [Application structure](#application_structure)
+
+### <a name="system_setup"></a> System setup
+#### <a name="docker_setup"></a> Docker setup
+Install docker with centOS. Fist what I done it's pulled cenots container:
 `docker pull centos`
-`docker run centos`
 
-Thorugh container using was issues with EnduroX setup. The solution it's adding the --proveleged flag
-`docker run -it --privileged -v ~/Projects/balance_db/:/opt/baldb --name="EnduroX" centos:latest`
+The next, it's I've run it couple of times. And after a large time of invetsigations the right command to run the container it's:
+```
+docker run -itd --privileged -v <Your path to this repo>/balance_db/:/opt/baldb --name="EnduroX" centos:latest /usr/sbin/init
+```
+For conecting:
+```
+docker exec -it EnduroX /bin/bash
+```
+At the start centos has a problem with package manager. So I've createt [script](./centos_setup.sh) which fixes it.
+#### <a name="endurox_setup"></a> EnduroX setup
+So, that [guide](https://www.endurox.org/dokuwiki/doku.php?id=endurox:v8.0.x:guides:getting_started_tutorial#_creating_the_server_process) helps me a lot. As it's has some amount of copypasta process. The repo consists the [script](./admin_setup) with automaited setup steps.
+For installing endurox utils. I've created [script](./endurox_setup.sh) which is downloads and setups provision
 
-xadmin provision -d \
-    -v qprefix=baldb \
-    -v installQ=n  \
-    -v eventSv=n \
-    -v cpmSv=n \
-    -v configSv=n \
-    -v bridge=n \
-    -v addubf=bank.fd
+#### <a name="database_setup"></a> PostgresSQL setup
+##### Install the repository RPM:
 
+### <a name="application_setup"></a> Application design
+#### <a name="database_structure"></a> Database structure
+Relates to the task requirements the database structure should has following structure:
+![database](./resources/account_balance_database.svg)
+Init database:
+```
+/usr/pgsql-14/bin/initdb -D /opt/baldb/database/data
+```
+Connecting to postgreSQL
+```
+sudo -u postgres psql
+```
+Creating user:
+```
+CREATE USER endurox WITH CREATEDB LOGIN ENCRYPTED PASSWORD '000';
+CREATE DATABASE endurox;
+```
+Connecting to database:
+```
+/usr/pgsql-14/bin/postgres -D database/data
+```
+Create database:
+```
+createdb account-balance
+```
 
-# .bashrc
-export PS1="[\u@\h] (\W)
-> "
+Create Account table:
+```
+CREATE TABLE ACCOUNT(
+	account_number int NOT NULL,
+	currency varchar(5) NOT NULL,
+	branch_code int NOT NULL,
+	PRIMARY KEY(account_number)
+);
+```
+Create Balance table:
+```
+CREATE TABLE BALANCE(
+	id serial NOT NULL PRIMARY KEY,
+	date DATE NOT NULL,
+	balance float NOT NULL,
+	account_number int,
+	CONSTRAINT FK_AccountBalance FOREIGN KEY (account_number)
+	REFERENCES ACCOUNT(account_number)
+);
+```
+Update account data:
+```
+INSERT INTO account (account_number, currency, branch_code)
+VALUES(1992742, 'UAH', 231244);
+```
+
+#### <a name="application_structure"></a> Application structure
+![application](./resources/account_balance.svg)
