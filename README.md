@@ -12,6 +12,7 @@ The main solution developed by using docker centos container
  - [X] [Application design](#application_setup)
 	 - [X] [Database structure](#database_structure)
 	 - [X] [Application structure](#application_structure)
+ - [X] [Tests](./test/README.md)
 
 ### <a name="system_setup"></a> System setup
 #### <a name="docker_setup"></a> Docker setup
@@ -37,7 +38,8 @@ For installing endurox utils. I've created [script](./endurox_setup.sh) which is
 #### <a name="database_structure"></a> Database structure
 Relates to the task requirements the database structure should has following structure:
 ![database](./resources/account_balance_database.svg)
-Init database:
+
+#### Init database:
 ```
 /usr/pgsql-14/bin/initdb -D /opt/baldb/database/data
 ```
