@@ -1,0 +1,90 @@
+/**
+ * @author      : sbura (sbura@$HOSTNAME)
+ * @file        : ecpg_sql
+ * @created     : Monday Aug 15, 2022 14:01:27 EEST
+ */
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "ecpg_sql.h"
+
+#define SUCCES 0
+#define FAIL   -1
+
+static void die(void)
+{
+    /* avoid recursion on error */
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    fprintf(
+        stderr,
+        "database error %s:\n%s\n",
+        sqlca.sqlstate,
+        sqlca.sqlerrm.sqlerrmc
+    );
+
+    EXEC SQL ROLLBACK;
+    EXEC SQL DISCONNECT;
+
+    exit(1);
+
+    /* restore the original handler */
+    EXEC SQL WHENEVER SQLERROR CALL die();
+}
+
+int connect_to_database(const char* path, const char* user,
+    const char* password)
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    char v_target[50];
+    char v_user[10];
+    char v_passwd[10];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL CONNECT TO :v_target USER :v_user USING :v_passwd;
+
+    return 0;
+}
+
+long select_from_account(long account_number)
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    long v_acc_num;
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL DECLARE is_account CURSOR FOR
+        SELECT account_number FROM account
+        WHERE account.account_number = account_number;
+
+    EXEC SQL FETCH FROM is_account INTO :v_acc_num;
+
+    return v_acc_num == account_number ? SUCCES : FAIL;
+}
+
+int select_from_balance(long account_number, const char* idate,
+    float* out_balance)
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    float v_balance = 0.0;
+    //date v_date;
+    EXEC SQL END DECLARE SECTION;
+
+    //v_date = PGTYPESdate_from_asc(idate, NULL);
+
+    //EXEC SQL DECLARE get_balance CURSOR FOR
+    //    SELECT balance FROM balance
+    //    WHERE balance.account_number = account_number
+    //    AND balance.date = v_date;
+
+    //EXEC SQL FETCH FROM get_balance INTO :v_balance;
+
+    //*out_balance = v_balance;
+
+    return v_balance != 0 ? SUCCES : FAIL;
+}
+
+void disconect_connect_from_database()
+{
+    EXEC SQL DISCONNECT ALL;
+}
