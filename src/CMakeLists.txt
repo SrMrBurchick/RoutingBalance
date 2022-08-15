@@ -1,5 +1,2 @@
-set(BANKCL "BankClient")
-set(BANKSV "BankServer")
 
-add_subdirectory(bankcl)
-add_subdirectory(banksv)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common)
