@@ -84,7 +84,7 @@ int select_from_balance(long account_number, const char* idate,
     return v_balance != 0 ? SUCCES : FAIL;
 }
 
-void disconect_connect_from_database()
+void disconnect_from_database()
 {
     EXEC SQL DISCONNECT ALL;
 }

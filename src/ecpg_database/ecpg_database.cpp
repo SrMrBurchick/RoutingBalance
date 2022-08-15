@@ -14,7 +14,7 @@ ECPGDatabase::ECPGDatabase()
 
 ECPGDatabase::~ECPGDatabase()
 {
-    disconect_connect_from_database();
+    disconnect_from_database();
 }
 
 bool ECPGDatabase::connect(const std::string_view path,

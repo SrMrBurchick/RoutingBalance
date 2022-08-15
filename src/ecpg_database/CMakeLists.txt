@@ -14,9 +14,13 @@ if (NOT COMPILE_COMMANDS)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
+    include_directories(/usr/pgsql-14/include)
+
     add_library(ecpg_lib
         ecpg_sql.c
     )
 
+    find_package(PostgreSQL REQUIRED)
     target_link_libraries(ecpg_lib ecpg pq)
+    target_link_libraries(ecpg_database ecpg_lib)
 endif()

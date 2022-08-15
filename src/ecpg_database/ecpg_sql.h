@@ -13,7 +13,7 @@ extern "C" {
 
 int connect_to_database(const char* path, const char* user,
     const char* password);
-void disconect_connect_from_database();
+void disconnect_from_database();
 
 
 long select_from_account(long account_number);
