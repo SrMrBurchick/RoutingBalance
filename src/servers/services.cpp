@@ -27,8 +27,6 @@ void balanceService(UBFH *p_ub)
 
     if (false == service.parseRequest(p_ub)) {
         std::cout << "Account Balance not available" << std::endl;
-    } else {
-        printf("Yoy nay bude!\n");
     }
 }
 

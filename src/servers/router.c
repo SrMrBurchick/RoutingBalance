@@ -21,8 +21,6 @@ void ROUTER(TPSVCINFO *p_svc) {
 
     UBFH *p_ub = (UBFH *)p_svc->data;
 
-    printf("SUKA\n");
-
     fprintf(stderr, "ROUTER got call\n");
 
     /* Resize the buffer to have some space in... */

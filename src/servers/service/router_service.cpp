@@ -17,7 +17,6 @@ bool RouterService::parseRequest(UBFH* p_ub)
     char account[28 + 1];
     char date[10 + 1];
 
-    std::printf("PADLO!\n");
     /* Read the account field */
     len = sizeof(account);
     if (SUCCEED != Bget(p_ub, T_ACCNUM, 0, account, &len)) {

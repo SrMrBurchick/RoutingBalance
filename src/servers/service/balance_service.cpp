@@ -32,9 +32,6 @@ bool BalanceService::parseRequest(UBFH* p_ub)
         return false;
     }
 
-
-    fprintf(stdout, "PIZDA!\n");
-
     fprintf(stdout, "Recived request: account = %s, date = %s\n",
             account, date);
 
